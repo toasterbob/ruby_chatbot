@@ -11,7 +11,7 @@ Bot.on :message do |message|
   Bot.deliver({
     recipient: message.sender,
     message: {
-      text: "Two-fisted BOB the Destroyer: " + message.text
+      text: "Two-fisted BOB the Destroyer: " + message.text + " " + message.sender
     }
   }, access_token: ENV["FB_ACCESS_TOKEN"])
 end
