@@ -14,23 +14,4 @@
  *= require_self
  */
 
- body {
-   margin: 0;
-   padding: 0;
-   height: 100%;
- }
-
- h1 {
-
-   margin: 0;
-   margin-left: 10px;
-   padding: 0;
-   width: 100%;
- }
-
- .top {
-   background-color: beige;
-   margin: 0;
-   padding: 0;
-   width: 100%;
- }
+ 

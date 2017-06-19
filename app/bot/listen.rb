@@ -87,6 +87,47 @@ def add_cat(text)
   end
 end
 
+def check_user(id)
+  if User.find_by(name: id).nil?
+    User.create({name: id})
+  end
+
+end
+
+def list_todos(id)
+  current_user = User.find_by(name: id)
+  todos = current_user.todos.where(completed: false)
+  unfinished = todos.each_with_index.map { |item, i| "##{i + 1}. #{item.task} \n"}
+  message = "You currently have #{todos.count} to-do item#{unfinished.count == 1 ? "" : "s"}: \n#{unfinished.join("")}"
+end
+
+def list_done(id)
+  current_user = User.find_by(name: id)
+  todos = current_user.todos.where(completed: true)
+  done = todos.each_with_index.map { |item, i| "##{i + 1}. #{item.task} \n"}
+  message = "You have #{done.count} item#{done.count == 1 ? "" : "s"} marked as done: \n#{done.join("")}"
+end
+
+def mark_done(id, num)
+  current_user = User.find_by(name: id)
+  todos = current_user.todos.where(completed: false)
+  todo = todos[num - 1] if num > 0
+
+  if todo
+    todo.update({completed: true})
+    message = "To-do item ##{num} ('#{todo.task}') marked as done"
+  else
+    message = "Invalid number"
+  end
+  
+end
+
+def add_item(id, item)
+  current_user = User.find_by(name: id)
+  Todo.create({task: item, completed: false, user_id: current_user.id})
+  message = "To-do item '#{item}' added to list"
+end
+
 magic_eight = ["It is certain", "It is decidedly so", "Without a doubt",
               "Yes definitely", "You may rely on it", "As I see it, yes",
               "Most likely", "Magic eight this, monkey!", "Outlook good",
@@ -109,8 +150,20 @@ Facebook::Messenger::Subscriptions.subscribe(access_token: ENV["FB_ACCESS_TOKEN"
 # message.text        # => 'Hello, bot!'
 Bot.on :message do |message|
   body = message.text.downcase
+  id = message.sender["id"]
+  check_user(id) #creates a new user in users table if none exists
+
   if body.include?("hello")
-    response = "Why hello there"
+    response = "Hello there!"
+  elsif body[0..2] === "add"
+    item = body.slice(4, body.length)
+    response = add_item(id, item)
+  elsif body[0] === "#" && body.include?("done")
+    response = mark_done(id, body[1].to_i)
+  elsif body.include?("list") && body.include?("done")
+    response = list_done(id)
+  elsif body.include?("list")
+    response = list_todos(id)
   elsif body.include?("cat") && body.include?("names")
     response = cat_names
   elsif body.include?("add_cat")
