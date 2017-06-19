@@ -21,6 +21,41 @@ def get_advice
 
 end
 
+def get_quote
+  r = open('http://www.yerkee.com/api/fortune')
+
+  if r.status[0] == "200"
+    doc = ""
+
+    r.each do |line|
+      doc << line
+    end
+
+    doc = JSON.parse(doc, :symbolize_names => true)
+    quote = doc[:fortune]
+
+    return quote
+  end
+end
+
+def chuck_norris
+
+  r = open('http://api.icndb.com/jokes/random')
+
+  if r.status[0] == "200"
+    doc = ""
+
+    r.each do |line|
+      doc << line
+    end
+
+    doc = JSON.parse(doc, :symbolize_names => true)
+    response = doc[:value][:joke]
+
+    return response
+  end
+end
+
 magic_eight = ["It is certain", "It is decidedly so", "Without a doubt",
               "Yes definitely", "You may rely on it", "As I see it, yes",
               "Most likely", "Magic eight this, monkey!", "Outlook good",
@@ -57,6 +92,12 @@ Bot.on :message do |message|
       response = get_advice
   elsif body.include?("rick") || body.include?("astley")
       response = lyrics
+  elsif body.include?("quote")
+      response = get_quote
+  elsif body.include?("star wars")
+      response = "Luke, I am your father!"
+  elsif body.include?("chuck norris")
+      response = chuck_norris
   else
     response = "Boaty Bob McBoatFace repeats: " + message.text
   end
