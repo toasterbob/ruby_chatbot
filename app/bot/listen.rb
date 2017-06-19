@@ -21,11 +21,11 @@ Bot.on :message do |message|
   if body.include?("hi") || body.include?("hello")
     response = "Why hello there"
   elsif body.include?("bye")
-    response "Goodbye"
+    response = "Goodbye"
   elsif body.include?("who") && (body.include?("this") || body.include?("are you"))
-    response "I'll never tell"
+    response =  "I'll never tell"
   elsif body.include?("magic") && body.include?("ball") && (body.include?("eight") || body.include?("8"))
-    response magic_eight[rand(magic_eight.length)]
+    response =  magic_eight[rand(magic_eight.length)]
   else
     response = "Boaty Bob McBoatFace repeats: " + message.text
   end
