@@ -94,7 +94,7 @@ Bot.on :message do |message|
       response = lyrics
   elsif body.include?("quote")
       response = get_quote
-  elsif body.include?("star wars")
+  elsif body.include?("star wars") || body.include?("luke")
       response = "Luke, I am your father!"
   elsif body.include?("chuck norris")
       response = chuck_norris
