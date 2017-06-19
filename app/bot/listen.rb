@@ -10,6 +10,11 @@ magic_eight = ["It is certain", "It is decidedly so", "Without a doubt",
               "My sources say no", "Outlook not so good", "Very doubtful",
               "If you have to ask the magic eight ball, you should rethink your life choices"]
 
+lyrics = "Never gonna give you up, never gonna let you down
+Never gonna run around and desert you.
+Never gonna make you cry, never gonna say goodbye
+Never gonna tell a lie and hurt you."
+
 Facebook::Messenger::Subscriptions.subscribe(access_token: ENV["FB_ACCESS_TOKEN"])
 
 # message.id          # => 'mid.1457764197618:41d102a3e1ae206a38'
@@ -26,6 +31,12 @@ Bot.on :message do |message|
     response =  "I'll never tell"
   elsif body.include?("magic") && body.include?("ball") && (body.include?("eight") || body.include?("8"))
     response =  magic_eight[rand(magic_eight.length)]
+  elsif body.include?("dice")
+      response = "I rolled a #{rand(6) + 1} and a #{rand(6) + 1}."
+  elsif body.include?("advice")
+      response = get_advice
+  elsif body.include?("rick") || body.include?("astley")
+      response = lyrics
   else
     response = "Boaty Bob McBoatFace repeats: " + message.text
   end
