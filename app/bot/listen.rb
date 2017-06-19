@@ -73,16 +73,17 @@ def add_cat(text)
     a.strip!
     name, value = a.split(":")
     name.strip!
-    value.strip! 
+    value.strip!
     params[name] = value
   end
 
   new_cat = Cat.new(params)
 
-  if new_cat.save
-    "Added!"
+  if params["name"] && params["address"]
+    new_cat.save
+    "Added #{new_cat.name}!"
   else
-    "#{new_cat.errors.full_messages}.  Proper format: 'new_cat | name:bob | address:1404 Maple Dr.'"
+    "Improper format. Correct Sample: 'add_cat | name:bob | address:1404 Maple Dr.'"
   end
 end
 
