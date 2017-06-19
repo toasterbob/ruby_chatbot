@@ -56,6 +56,25 @@ def chuck_norris
   end
 end
 
+def get_response(input)
+  url = 'http://www.cleverbot.com/getreply?key=' + ENV["CLEVERBOT_API"] + "&input=" + input
+  # url = 'http://www.cleverbot.com/getreply?key=' + "API" + "&input=" + input
+  r = open(url)
+
+  if r.status[0] == "200"
+    doc = ""
+
+    r.each do |line|
+      doc << line
+    end
+
+    doc = JSON.parse(doc, :symbolize_names => true)
+    response = doc[:output]
+
+    return response
+  end
+end
+
 def cat_names
   names = []
   @cats = Cat.all
@@ -97,14 +116,14 @@ end
 def list_todos(id)
   current_user = User.find_by(name: id)
   todos = current_user.todos.where(completed: false)
-  unfinished = todos.each_with_index.map { |item, i| "##{i + 1}. #{item.task} \n"}
+  unfinished = todos.each_with_index.map { |item, i| "   ##{i + 1}. #{item.task} \n"}
   message = "You currently have #{todos.count} to-do item#{unfinished.count == 1 ? "" : "s"}: \n#{unfinished.join("")}"
 end
 
 def list_done(id)
   current_user = User.find_by(name: id)
   todos = current_user.todos.where(completed: true)
-  done = todos.each_with_index.map { |item, i| "##{i + 1}. #{item.task} \n"}
+  done = todos.each_with_index.map { |item, i| "   ##{i + 1}. #{item.task} (completed on: #{item.updated_at})\n"}
   message = "You have #{done.count} item#{done.count == 1 ? "" : "s"} marked as done: \n#{done.join("")}"
 end
 
@@ -119,7 +138,7 @@ def mark_done(id, num)
   else
     message = "Invalid number"
   end
-  
+
 end
 
 def add_item(id, item)
@@ -130,7 +149,7 @@ end
 
 magic_eight = ["It is certain", "It is decidedly so", "Without a doubt",
               "Yes definitely", "You may rely on it", "As I see it, yes",
-              "Most likely", "Magic eight this, monkey!", "Outlook good",
+              "Most likely", "Magic eight is having a me day!", "Outlook good",
               "Yes", "Signs point to yes", "Reply hazy try again",
               "Ask again later", "Better not tell you now", "Cannot predict now",
               "Concentrate and ask again", "Don't count on it", "My reply is no",
@@ -141,6 +160,11 @@ lyrics = "Never gonna give you up, never gonna let you down
 Never gonna run around and desert you.
 Never gonna make you cry, never gonna say goodbye
 Never gonna tell a lie and hurt you."
+
+help = "To see Todo items type: LIST \n
+To see completed items type: LIST DONE \n
+To add an item type: ADD buy milk\n
+To mark an item done type: #1 DONE"
 
 Facebook::Messenger::Subscriptions.subscribe(access_token: ENV["FB_ACCESS_TOKEN"])
 
@@ -155,6 +179,8 @@ Bot.on :message do |message|
 
   if body.include?("hello")
     response = "Hello there!"
+  elsif body.include?("help")
+    response = help
   elsif body[0..2] === "add"
     item = body.slice(4, body.length)
     response = add_item(id, item)
@@ -187,7 +213,7 @@ Bot.on :message do |message|
   elsif body.include?("chuck norris")
       response = chuck_norris
   else
-    response = "Boaty Bob McBoatFace repeats: " + message.text
+    response = get_response(body) #"Boaty Bob McBoatFace repeats: " + message.text
   end
   Bot.deliver({
 
