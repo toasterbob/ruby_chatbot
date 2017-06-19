@@ -1,5 +1,25 @@
 require "facebook/messenger"
+require 'open-uri'
+require 'json'
 include Facebook::Messenger
+
+def get_advice
+  r = open('http://api.adviceslip.com/advice')
+
+  if r.status[0] == "200"
+    doc = ""
+
+    r.each do |line|
+      doc << line
+    end
+
+    doc = JSON.parse(doc, :symbolize_names => true)
+    advice = doc[:slip][:advice]
+
+    return advice
+  end
+
+end
 
 magic_eight = ["It is certain", "It is decidedly so", "Without a doubt",
               "Yes definitely", "You may rely on it", "As I see it, yes",
