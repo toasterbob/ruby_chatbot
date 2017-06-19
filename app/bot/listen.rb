@@ -56,6 +56,27 @@ def chuck_norris
   end
 end
 
+def cat_names
+  names = []
+  @cats = Cat.all
+  @cats.each do |cat|
+    names << cat.name
+  end
+  names.join(", ")
+end
+
+def cat_add(text)
+  if valid
+    new_cat = Cat.new
+    new_cat.name = "Miles"
+    new_cat.address = "82208 E. Helio"
+    new_cat.save!
+    "Added!"
+  else
+    "Invalid"
+  end
+end
+
 magic_eight = ["It is certain", "It is decidedly so", "Without a doubt",
               "Yes definitely", "You may rely on it", "As I see it, yes",
               "Most likely", "Magic eight this, monkey!", "Outlook good",
@@ -78,8 +99,12 @@ Facebook::Messenger::Subscriptions.subscribe(access_token: ENV["FB_ACCESS_TOKEN"
 # message.text        # => 'Hello, bot!'
 Bot.on :message do |message|
   body = message.text.downcase
-  if body.include?("hi") || body.include?("hello")
+  if body.include?("hello")
     response = "Why hello there"
+  elsif body.include?("cat") && body.include?("names")
+    response = cat_names
+  elsif body.include?("cat") && body.include?("add")
+    response = cat_add(body)
   elsif body.include?("bye")
     response = "Goodbye"
   elsif body.include?("who") && (body.include?("this") || body.include?("are you"))
