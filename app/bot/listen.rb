@@ -65,15 +65,24 @@ def cat_names
   names.join(", ")
 end
 
-def cat_add(text)
-  if valid
-    new_cat = Cat.new
-    new_cat.name = "Miles"
-    new_cat.address = "82208 E. Helio"
-    new_cat.save!
+def add_cat(text)
+  arr = text.split("|")
+  arr.shift
+  params = {}
+  arr.each do |a|
+    a.strip!
+    name, value = a.split(":")
+    name.strip!
+    value.strip! 
+    params[name] = value
+  end
+
+  new_cat = Cat.new(params)
+
+  if new_cat.save
     "Added!"
   else
-    "Invalid"
+    "#{new_cat.errors.full_messages}.  Proper format: 'new_cat | name:bob | address:1404 Maple Dr.'"
   end
 end
 
@@ -103,8 +112,8 @@ Bot.on :message do |message|
     response = "Why hello there"
   elsif body.include?("cat") && body.include?("names")
     response = cat_names
-  elsif body.include?("cat") && body.include?("add")
-    response = cat_add(body)
+  elsif body.include?("add_cat")
+    response = add_cat(body)
   elsif body.include?("bye")
     response = "Goodbye"
   elsif body.include?("who") && (body.include?("this") || body.include?("are you"))
