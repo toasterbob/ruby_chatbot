@@ -66,3 +66,6 @@ Some of these connect to other APIs using the open-uri and json gems.
 #### Ask for advice
 
 #### Ask for a quote
+
+####  Ask it anything!  
+I hooked it up to a conversational chatbot as well.  So anything else, ends up being answered by that.  
