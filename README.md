@@ -18,6 +18,7 @@ Adds an item to your current todo list.
 Displays all of these commands
 
 ## Sample Interface
+```text
 User: LIST
 Bot: You currently have 3 to-do items:
   #1: Redesign website
@@ -52,20 +53,20 @@ I would run tests for both the user and todos models and controllers.  I would c
 
 ## Bonus Easter Eggs
 Some of these connect to other APIs using the open-uri and json gems.  
+```
+###### Magic 8 ball: Will I get the job?
 
-#### Magic 8 ball: Will I get the job?
+###### Roll dice
 
-#### Roll dice
+###### Chuck Norris
 
-#### Chuck Norris
+###### Mention Star Wars
 
-#### Mention Star Wars
+###### Mention Rick Astley
 
-#### Mention Rick Astley
+###### Ask for advice
 
-#### Ask for advice
+###### Ask for a quote
 
-#### Ask for a quote
-
-####  Ask it anything!  
+######  Ask it anything!  
 I hooked it up to a conversational chatbot as well.  So anything else, ends up being answered by that.  
