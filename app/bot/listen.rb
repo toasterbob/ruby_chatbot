@@ -182,7 +182,8 @@ Bot.on :message do |message|
   elsif body.include?("help")
     response = help
   elsif body[0..2] === "add"
-    item = body.slice(4, body.length)
+    text = message.text
+    item = text.slice(4, text.length)
     response = add_item(id, item)
   elsif body[0] === "#" && body.include?("done")
     response = mark_done(id, body[1].to_i)
