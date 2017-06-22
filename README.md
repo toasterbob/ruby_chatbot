@@ -54,7 +54,8 @@ I would run tests for both the user and todos models and controllers.  I would c
 ## Bonus Easter Eggs
 Some of these connect to other APIs using the open-uri and json gems.  
 ```
-###### Magic 8 ball: Will I get the job?
+###### Ask Magic 8 ball a question
+i.e. Magic 8 ball: Will I get the job?
 
 ###### Roll dice
 
